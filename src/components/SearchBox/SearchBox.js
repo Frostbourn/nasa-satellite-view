@@ -1,0 +1,46 @@
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+
+import TextField from "@material-ui/core/TextField";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+
+const SearchBox = ({ state }) => {
+  const [query, setQuery] = useState("Haw");
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${query}.json?access_token=pk.eyJ1IjoiZnJvc3Rib3VybiIsImEiOiJja2x0aTl4OWQwOHluMndvMzA1bXBicDBiIn0.8GtwA1s3m5hqxxgRpaaU4Q`
+      )
+      .then((response) => {
+        setData(response.data);
+      });
+  }, [query]);
+
+  const handleInputChange = (event, value) => {
+    value ? setQuery(value) : ""; /* eslint-disable-line */
+  };
+
+  const handleChange = (event, value) => {
+    state(value);
+  };
+
+  return (
+    <Autocomplete
+      style={{ width: 300 }}
+      options={data.features}
+      autoHighlight
+      getOptionLabel={(option) => (option.text ? option.text : "")}
+      getOptionSelected={(option, value) => option.text === value.text}
+      onInputChange={handleInputChange}
+      onChange={handleChange}
+      renderOption={(option) => <>{option.place_name}</>}
+      renderInput={(params) => (
+        <TextField {...params} label="Choose location" variant="outlined" />
+      )}
+    />
+  );
+};
+
+export default SearchBox;
