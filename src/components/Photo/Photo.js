@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import styled from "styled-components";
 
 import Spinner from "../Spinner/Spinner.js";
@@ -19,12 +18,12 @@ const Photo = ({ props }) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    axios
-      .get(
-        `https://api.nasa.gov/planetary/earth/assets?lon=${props.lng}&lat=${props.lat}&date=2020-07-01&dim=0.5&api_key=TdVueCcN5AyTbxNgrEEU6bU9CXQwW5SMhoRLwppq`
-      )
-      .then((response) => {
-        setData(response.data);
+    fetch(
+      `https://api.nasa.gov/planetary/earth/assets?lon=${props.lng}&lat=${props.lat}&date=2020-07-01&dim=0.5&api_key=TdVueCcN5AyTbxNgrEEU6bU9CXQwW5SMhoRLwppq`
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        setData(data);
       });
   }, [props.lat, props.lng]);
 

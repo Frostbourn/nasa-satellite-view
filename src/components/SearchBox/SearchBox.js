@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
@@ -9,12 +8,12 @@ const SearchBox = ({ state }) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    axios
-      .get(
-        `https://api.mapbox.com/geocoding/v5/mapbox.places/${query}.json?access_token=pk.eyJ1IjoiZnJvc3Rib3VybiIsImEiOiJja2x0aTl4OWQwOHluMndvMzA1bXBicDBiIn0.8GtwA1s3m5hqxxgRpaaU4Q`
-      )
-      .then((response) => {
-        setData(response.data);
+    fetch(
+      `https://api.mapbox.com/geocoding/v5/mapbox.places/${query}.json?access_token=pk.eyJ1IjoiZnJvc3Rib3VybiIsImEiOiJja2x0aTl4OWQwOHluMndvMzA1bXBicDBiIn0.8GtwA1s3m5hqxxgRpaaU4Q`
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        setData(data);
       });
   }, [query]);
 
